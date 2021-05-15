@@ -9,7 +9,7 @@ import java.io.IOException;
 public class stop{
 
     public stop(){
-        read();
+        // read();
     }
 
     public int read(){

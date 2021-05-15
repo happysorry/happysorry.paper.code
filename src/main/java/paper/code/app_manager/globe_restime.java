@@ -23,18 +23,29 @@ public class globe_restime implements Runnable{
     }
     
     public void add_file(){
-        file.add("src/main/java/paper/code/ql3/app_mn1/app_mn1_response_time.txt");
-        file.add("src/main/java/paper/code/ql3/app_mn2/app_mn2_response_time.txt");
-        file.add("src/main/java/paper/code/ql3/app_mnae1/app_mnae1_response_time.txt");
-        file.add("src/main/java/paper/code/ql3/app_mnae2/app_mnae2_response_time.txt");
+        file.add("src/main/java/paper/code/ql3/app_mn1/app_mn1_response_time2.txt");
+        file.add("src/main/java/paper/code/ql3/app_mn2/app_mn2_response_time2.txt");
+        file.add("src/main/java/paper/code/ql3/app_mnae1/app_mnae1_response_time2.txt");
+        file.add("src/main/java/paper/code/ql3/app_mnae2/app_mnae2_response_time2.txt");
     }
     
     public void monitor(){
         while(true){
             System.out.println("total");
+            stop s = new stop();
+            int num = s.read();
+            if(num == 1){
+                try {
+                    System.out.println("globe sleep");
+                    Thread.sleep(80000);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
             read();
             double res_time = cal();
-
+            update(res_time);
             try {
                 Thread.sleep(20000);
             } catch (InterruptedException e) {
@@ -44,10 +55,11 @@ public class globe_restime implements Runnable{
         }
     }
 
-    public void update(double rest_time){
-        if(rest_time < limit_time){
+    public void update(double res_time){
+        if(res_time < limit_time){
             return;
         }
+        System.out.println("globe update");
         int neck = 0;
         double tmp = 0;
         // find out bottleneck
@@ -85,7 +97,7 @@ public class globe_restime implements Runnable{
     }
 
     public int read_cons(String con_name){
-        String filename ="src/main/java/paper/code/ql3/" + con_name + "/" + con_name + "_con1.txt";
+        String filename ="src/main/java/paper/code/ql3/" + con_name + "/" + con_name + "_con2.txt";
         FileReader fr;
         int cons = 0;
         try {

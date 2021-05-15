@@ -6,60 +6,66 @@ import paper.code.ql3.*;
 import paper.code.send_req.*;
 public class Start {
     public static void main(String[]args){
-        channel channel = new channel(1);
-        // ExecutorService ex = Executors.newFixedThreadPool(10);
-        channel.startWorkerThread();
-        int iter = 200;
-        double sim_time = 1e13; // 10000 second
-        double check_time = 1e10;
+        int iter = 400;
+        double sim_time = 10; // 10000 second
+        double check_time = 10;
         double st_time = 6e10;
-
-        Thread s1 = new Thread(new mu_test(sim_time));
-        s1.start();
-        
-        Thread t2 = new Thread(new start_ql3("app_mn1",iter));
-        Thread t3 = new Thread(new start_ql3("app_mn2",iter));
-        Thread t4 = new Thread(new start_ql3("app_mnae1",iter));
-        Thread t5 = new Thread(new start_ql3("app_mnae2",iter));
-        t2.start();
-        t3.start();
-        t4.start();
-        t5.start();
-
-        Thread g6 = new Thread(new globe_restime());
-        g6.start();
-        // globe_restime gl = new globe_restime();
-        // gl.monitor();
-        double startTime = System.nanoTime();
-        double stop_time = System.nanoTime();
-        while(true){
-            double t = System.nanoTime();
-            if(t-startTime > sim_time)//simulate time
-                break;
+        ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+        // cachedThreadPool.execute(new mu_test(sim_time));
+        for(int j = 0;j<3;j++){
+            Thread s1 = new Thread(new mu_test(sim_time));
+            s1.start();
             
-            if((t - stop_time) > check_time){
-                stop s = new stop();
-                int num = s.read();
-                System.out.println("num " + num);
-                if(num == 1){
-                    System.out.println("thread stop");
-                    try {
-                        Thread.sleep(80000);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
+            Thread t2 = new Thread(new start_ql3("app_mn1",sim_time));
+            Thread t3 = new Thread(new start_ql3("app_mn2",sim_time));
+            Thread t4 = new Thread(new start_ql3("app_mnae1",sim_time));
+            Thread t5 = new Thread(new start_ql3("app_mnae2",sim_time));
+            t2.start();
+            t3.start();
+            t4.start();
+            t5.start();
 
-                        e.printStackTrace();
+
+            // cachedThreadPool.execute(new mu_test(sim_time));
+            // cachedThreadPool.execute(new start_ql3("app_mn1",sim_time));
+            // cachedThreadPool.execute(new start_ql3("app_mn2",sim_time));
+            // cachedThreadPool.execute(new start_ql3("app_mnae1",sim_time));
+            // cachedThreadPool.execute(new start_ql3("app_mnae2",sim_time));
+
+            // Thread g6 = new Thread(new globe_restime());
+            // g6.start();
+            // globe_restime gl = new globe_restime();
+            // gl.monitor();
+            double startTime = System.nanoTime();
+            double stop_time = System.nanoTime();
+            while(true){
+                double t = System.nanoTime() - startTime;
+                double tt = System.nanoTime() - stop_time;
+                t/=1e9;
+                if(t > sim_time)//simulate time
+                    break;
+                tt/=1e9;
+                // System.out.println("tt " +  tt);
+                if(tt > check_time){
+                    stop s = new stop();
+                    int num = s.read();
+                    System.out.println("num " + num);
+                    if(num == 1){
+                        System.out.println("thread stop");
+                        try {
+                            Thread.sleep(80000);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+
+                            e.printStackTrace();
+                        }
+                        s.write();
                     }
-                    s.write();
+                    stop_time = System.nanoTime();
                 }
-                stop_time = System.nanoTime();
             }
+            System.out.println("exit");
         }
-        s1.interrupt();
-        t2.interrupt();
-        t3.interrupt();
-        t4.interrupt();
-        t5.interrupt();
     }
 
 
