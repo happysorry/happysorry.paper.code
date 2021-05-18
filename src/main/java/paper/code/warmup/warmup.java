@@ -19,7 +19,14 @@ public class warmup implements Runnable{
             double endTime = (System.nanoTime() - startTime) / 1e9;
             if(endTime > sim_time)
                 break;
-            
+            //get cpu utilization every second  
+            g.get_state1();
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         
     }

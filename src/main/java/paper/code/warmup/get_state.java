@@ -1,6 +1,7 @@
 package paper.code.warmup;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
@@ -12,6 +13,7 @@ public class get_state {
     ArrayList<String> machine_id = new ArrayList<>();
     public String con_name = "";
     public double[]arr = new double[5];
+    public int ind = 0;
 
     public get_state(String con_name){
         this.con_name = con_name;
@@ -93,7 +95,11 @@ public class get_state {
                 avg += tmp;
             }
             avg /= replicas;
-            
+            arr[ind] = avg;
+            ind ++;
+            if(ind == arr.length)
+                ind = 0;
+            avg_cpu();
         }
         catch(Exception e){
             e.printStackTrace();
@@ -104,7 +110,31 @@ public class get_state {
         for(int i=0;i<5;i++)
             arr[i]=-1;
     }
-    public void avg(){
-         
+
+    public void avg_cpu(){
+        double avg = 0;
+        int cnt = 0;
+        for(int i=0;i<5;i++){
+            if(arr[i]<0)
+                continue;
+            cnt ++;
+            avg += arr[i];
+        }
+        avg /= cnt;
+        write(avg);
+    }
+
+
+    public void write(double avg){
+        try {
+            String filename = con_name + "warmup.txt";
+            FileWriter fw = new FileWriter("src/main/java/paper/code/warmup/" + filename);
+            fw.write(avg + "\n");
+            fw.flush();
+            fw.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
