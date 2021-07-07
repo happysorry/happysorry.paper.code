@@ -13,7 +13,7 @@ public class stop{
     }
 
     public int read(){
-        String filename = "src/main/java/paper/code/signal.txt";
+        String filename = "signal.txt";
         try {
             FileReader fr = new FileReader(filename);
             BufferedReader r = new BufferedReader(fr);
@@ -37,7 +37,7 @@ public class stop{
 
     void write() {
         try {
-            String filename = "src/main/java/paper/code/signal.txt";
+            String filename = "signal.txt";
             FileWriter fw1 = new FileWriter(filename);
             fw1.write(0 + "\n");
             fw1.flush();

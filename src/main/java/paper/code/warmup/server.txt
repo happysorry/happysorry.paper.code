@@ -1,2 +1,1 @@
-worker2
-default
+worker3
