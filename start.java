@@ -12,7 +12,7 @@ public class start {
         int iter = 1;
         double sim_time = 3600;
         int max_iter = 121; 
-        String input_file = "input/exp_60.dat";
+        String input_file = "input/exp_60.dat"; 
         ExecutorService es = Executors.newCachedThreadPool();
         restart r = new restart();
         for(int i=0;i<iter;i++){
