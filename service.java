@@ -42,24 +42,13 @@ public class service implements Runnable {
             while ((System.nanoTime() - st) / 1e9 < 30)
                 ;
             st = System.nanoTime();
-            print_threshold();
-            double use = get_use2();
-            if(use > threshold){
-                int replicas = get_cons();
-                if(replicas < 4){
-                    replicas ++;
-                    add_cons(replicas);
-                }
-            }
-            if(use < 10){
-                int replicas = get_cons();
-                if(replicas > 1){
-                    replicas --;
-                    add_cons(replicas);
-                }
-            }
+            stop s = new stop();
+            int sig = s.read();
+            if(sig != 0)
+                Wait(140000);
         }
         print_qtable();
+        System.out.println("service over");
     }
 
     /////////////////////////////////
@@ -104,7 +93,7 @@ public class service implements Runnable {
             try {
                 while ((line = r.readLine()) != null) {
                     String s[] = line.split(" ");
-                    for (int i = 0; i < 5; i++)
+                    for (int i = 0; i < 3; i++)
                         Q[ind][i] = Double.parseDouble(s[i]);
                     ind++;
                 }
@@ -128,6 +117,7 @@ public class service implements Runnable {
      * print out q table
      */
     void print_qtable() {
+        // System.out.println("print q table");
         FileWriter fw;
         try {
             String filename = "qtable/" + con_name + "_qtable.txt";
@@ -194,7 +184,7 @@ public class service implements Runnable {
         /////////////////////////////////////////////////////////////// + threshold
         tmp1.threshold = st.threshold + 1;
         tmp1.use = st.use;
-        if (tmp1.threshold > 9)
+        if (tmp1.threshold > 8)
             ;
         else
             res1[2] = tmp1;
@@ -285,7 +275,7 @@ public class service implements Runnable {
             cperf = Math.exp(tmp);
         }
         //////////////////////////////// cres
-        double theta = s.threshold * 0.1;
+        double theta = (s.threshold + 1) * 0.1;
         cres = 1 - theta;
         ////////////////////////////////
         cost = wperf * cperf + wres * cres;
@@ -405,7 +395,24 @@ public class service implements Runnable {
                 System.out.println("-r");
             }
             // update threshold
-            threshold = next.threshold;
+            /////////////////////////////////////////// check threshold
+            threshold = next.threshold +1;
+            threshold *= 10;
+            print_threshold();
+            if(now_use > threshold){
+                int replicas = get_cons();
+                if(replicas < 4){
+                    replicas ++;
+                    add_cons(replicas);
+                }
+            }
+            else if(now_use < 10){
+                int replicas = get_cons();
+                if(replicas > 1){
+                    replicas --;
+                    add_cons(replicas);
+                }
+            }
             Wait(25000);
             /////////////////////////////////////////////////
             // es.execute(new health_check(sim_time));

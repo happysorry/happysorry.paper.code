@@ -52,13 +52,13 @@ public class send_req implements Runnable{
                 int val = Integer.parseInt(RFID);
                 String con = "";
                 con = "false";
-                if ((count % 5) == 0)
+                if ((count % 5) == 0)//20%
                     con = "false";
                 else
                     con = "true";
                 
                 // String path = "http://192.168.99.125:666/~/mn-cse/mn-name/AE1/RFID_Container_for_stage0";
-                String path = "http://192.168.99.125:666/~/mn-cse/mn-name/AE1/" + stage;
+                String path = "http://192.168.99.130:666/~/mn-cse/mn-name/AE1/" + stage;
                 // System.out.println(path);
                 URL url = new URL(path);
                 HttpURLConnection http = (HttpURLConnection) url.openConnection();

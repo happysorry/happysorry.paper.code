@@ -62,6 +62,7 @@ public class new_send_request implements Runnable{
         ExecutorService es = Executors.newFixedThreadPool(40);
         System.out.println(stop.size());
         double et = System.nanoTime();
+        int cnt = 0;
         for(int i=0;i<stop.size();i++){
             count ++;
             long t = stop.get(i);
@@ -69,12 +70,19 @@ public class new_send_request implements Runnable{
             String s = stage.get(ind);
             es.execute(new send_req(s,count));
             Wait(t);
-            if((System.nanoTime() -st)/1e9 > 30){
+            if((System.nanoTime() -st)/1e9 > 10){
                 int signal = read_sig();
                 if(signal != 0){
                     Wait(140000);
                 }
+                st = System.nanoTime();
             }
+            if((System.nanoTime() - et)/1e9 > 30){
+                cnt ++;
+                et = System.nanoTime();
+            }
+            if(cnt > 120)
+            break;
         }
         
         System.out.println("send over");

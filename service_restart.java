@@ -66,7 +66,7 @@ public class service_restart {
     }
 
     public static int get_cons(String con_name){
-        String filename = "ql3/" + con_name + "/" + con_name + "_con2.txt";
+        String filename = "con1/" + con_name + "_con2.txt";
         int replicas = 0;
         try {
             FileReader fr = new FileReader(filename);

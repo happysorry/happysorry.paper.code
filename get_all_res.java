@@ -106,16 +106,16 @@ public class get_all_res implements Runnable {
                 String path = "";
                 switch (con_name) {
                     case "app_mn1":
-                        path = "http://192.168.99.125:666/~/mn-cse/mn-name/AE1/RFID_Container_for_stage0";
+                        path = "http://192.168.99.130:666/~/mn-cse/mn-name/AE1/RFID_Container_for_stage0";
                         break;
                     case "app_mn2":
-                        path = "http://192.168.99.125:777/~/mn-cse/mn-name/AE2/Control_Command_Container";
+                        path = "http://192.168.99.130:777/~/mn-cse/mn-name/AE2/Control_Command_Container";
                         break;
                     case "app_mnae1":
-                        path = "http://192.168.99.125:1111/test";
+                        path = "http://192.168.99.130:1111/test";
                         break;
                     case "app_mnae2":
-                        path = "http://192.168.99.125:2222/test";
+                        path = "http://192.168.99.130:2222/test";
                 }
 
                 URL url = new URL(path);
